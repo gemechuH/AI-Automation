@@ -1,0 +1,102 @@
+[
+  {
+    "Tool name": "ChatGPT Business",
+    "Main use case": "All-in-One AI Assistant",
+    "Best for": "Brainstorming, analysis, and custom workflows",
+    "Pricing": "$20-$30/user/month",
+    "Key features": "Custom GPTs, meeting summaries, advanced data analysis",
+    "Pros": "Highly versatile, integrates with almost everything, excellent reasoning",
+    "Cons": "Can hallucinate, requires prompt engineering skills",
+    "Website": "https://openai.com/chatgpt/business"
+  },
+  {
+    "Tool name": "Zapier AI Agents",
+    "Main use case": "Workflow Automation",
+    "Best for": "Connecting apps and eliminating manual data entry",
+    "Pricing": "$19.99/month starter",
+    "Key features": "Autonomous decision making, cross-app workflows, natural language builder",
+    "Pros": "Connects 5,000+ apps, massive time saver, set-it-and-forget-it",
+    "Cons": "Can get expensive at scale, complex logic requires learning curve",
+    "Website": "https://zapier.com/ai"
+  },
+  {
+    "Tool name": "Jasper AI",
+    "Main use case": "Content & Marketing",
+    "Best for": "High-volume marketers and agencies",
+    "Pricing": "$39/user/month",
+    "Key features": "Brand voice consistency, campaign generation, SEO optimization",
+    "Pros": "Maintains strict brand guidelines, creates multi-channel campaigns instantly",
+    "Cons": "Pricier than pure ChatGPT, sometimes repetitive",
+    "Website": "https://www.jasper.ai/"
+  },
+  {
+    "Tool name": "Canva Magic Studio",
+    "Main use case": "Visual Design",
+    "Best for": "Social media, presentations, and quick branding",
+    "Pricing": "$15/user/month",
+    "Key features": "Magic resize, AI image generation, automated video editing",
+    "Pros": "Incredibly user-friendly, high ROI for non-designers, deep feature set",
+    "Cons": "Not a full replacement for professional Adobe pipelines",
+    "Website": "https://www.canva.com/magic/"
+  },
+  {
+    "Tool name": "ClickUp Brain",
+    "Main use case": "Project Management",
+    "Best for": "Centralizing tasks and team documentation",
+    "Pricing": "$7/user/month (add-on)",
+    "Key features": "Predictive capacity planning, universal knowledge search, auto-standups",
+    "Pros": "Deeply integrated into the workflow, replaces need to ask colleagues for updates",
+    "Cons": "ClickUp itself has a steep learning curve, requires team adoption",
+    "Website": "https://clickup.com/ai"
+  },
+  {
+    "Tool name": "Slack AI",
+    "Main use case": "Internal Communication",
+    "Best for": "Remote teams with heavy chat volume",
+    "Pricing": "$10/user/month",
+    "Key features": "Thread summaries, daily channel recaps, conversational search",
+    "Pros": "Saves hours of reading catch-up messages, excellent search capabilities",
+    "Cons": "Only useful if your team's primary communication is inside Slack",
+    "Website": "https://slack.com/features/ai"
+  },
+  {
+    "Tool name": "HubSpot AI",
+    "Main use case": "Sales & CRM",
+    "Best for": "Sales teams needing pipeline acceleration",
+    "Pricing": "Starter $15/user/month",
+    "Key features": "Predictive lead scoring, automated email sequencing, contact enrichment",
+    "Pros": "Native to the CRM so data is safe, excellent for scaling outreach",
+    "Cons": "HubSpot pricing tiers scale aggressively",
+    "Website": "https://www.hubspot.com/artificial-intelligence"
+  },
+  {
+    "Tool name": "Fireflies.ai",
+    "Main use case": "Meetings & Video",
+    "Best for": "Sales calls, interviews, and internal synch-ups",
+    "Pricing": "$10/user/month",
+    "Key features": "Automated transcription, action item extraction, sentiment tracking",
+    "Pros": "Integrates with all major video platforms, great search functionality",
+    "Cons": "Transcripts can have minor errors with strong accents",
+    "Website": "https://fireflies.ai/"
+  },
+  {
+    "Tool name": "Intercom Fin AI",
+    "Main use case": "Customer Support",
+    "Best for": "Deflecting repetitive support tickets",
+    "Pricing": "$99/month + $0.99/resolution",
+    "Key features": "Instant ticket deflection, trained on your help center, multi-channel support",
+    "Pros": "Massive reduction in support volume, highly accurate based on YOUR data",
+    "Cons": "Pay-per-resolution pricing can unpredictable for burst-traffic",
+    "Website": "https://www.intercom.com/fin"
+  },
+  {
+    "Tool name": "Midjourney",
+    "Main use case": "Advanced Visual Branding",
+    "Best for": "Unique product mockups and ad creative",
+    "Pricing": "$10-$30/month",
+    "Key features": "High-fidelity generation, style consistency tuning",
+    "Pros": "Best-in-class image quality, highly creative outputs",
+    "Cons": "Operates via Discord (clunky UI), steep learning curve",
+    "Website": "https://www.midjourney.com/"
+  }
+]
