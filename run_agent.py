@@ -38,7 +38,7 @@ def get_all_urls():
     return lines
 
 
-def score_urls(urls, topic):
+def score_urls(urls: list[str], topic: str) -> list[str]:
     """
     Scores a list of URLs based on how likely they are to be good sources
     that won't block our simple scraper.
@@ -56,7 +56,7 @@ def score_urls(urls, topic):
     good_words = ["blog", "guide", "tools", "resources", "article", "post", "review"]
 
     for url in urls:
-        score = 0
+        score: int = 0
         reasons = []
         url_lower = url.lower()
         
@@ -124,6 +124,7 @@ def main():
     
     # 3. Scrape the best one, falling back to next best if needed
     scrape_success = False
+    successful_url = "Unknown URL"
     
     for url in best_urls:
         print(f"\nAttempting to scrape URL: {url}")
@@ -135,6 +136,7 @@ def main():
             
         if result.returncode == 0:
             scrape_success = True
+            successful_url = url
             break # Success, stop trying URLs
         else:
             print("--- URL Scrape Failed. Trying the next best url... ---")
@@ -160,11 +162,23 @@ def main():
         print(result.stderr)
         sys.exit(result.returncode)
 
+    # 5. Export Report
+    print(f"\nGenerating final report...")
+    result = subprocess.run(
+        ["python", "execution/export_results.py", topic, successful_url],
+        capture_output=True,
+        text=True
+    )
+
+    if result.stdout:
+        print(result.stdout)
+
     print("\n=== Research Agent Finished Successfully ===")
     print("Check these files:")
     print("- .tmp/urls.txt")
     print("- .tmp/raw_scrape.txt")
     print("- .tmp/extracted_facts.json")
+    print("- outputs/report.md")
 
 
 if __name__ == "__main__":
