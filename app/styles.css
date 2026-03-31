@@ -1,0 +1,79 @@
+/* Modern Streamlit Theme adjustments (Dark & Light Mode Compatible) */
+
+/* Clean up the main container padding */
+.block-container {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+    max-width: 900px !important;
+}
+
+/* Style the buttons */
+button[data-testid="baseButton-primary"] {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    border: none !important;
+    transition: all 0.2s ease;
+}
+
+button[data-testid="baseButton-primary"]:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Sidebar styling - rely on native Streamlit variables */
+[data-testid="stSidebar"] {
+    border-right: 1px solid var(--secondary-background-color);
+}
+
+/* Make headers look sharp without breaking dark mode text colors */
+h1 {
+    font-size: 2.2rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+h2 {
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    margin-top: 1.5rem !important;
+    border-bottom: 2px solid var(--secondary-background-color);
+    padding-bottom: 0.5rem;
+}
+
+/* Tabs styling */
+[data-testid="stTabs"] button {
+    font-weight: 500 !important;
+}
+
+/* Results container for readability */
+.results-card {
+    background-color: var(--secondary-background-color);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-top: 1rem;
+}
+
+/* URL Collection Cards */
+.url-card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    background-color: var(--secondary-background-color);
+    border-left: 4px solid var(--primary-color);
+}
+
+.url-card a {
+    text-decoration: none;
+    font-weight: bold;
+    color: var(--text-color);
+    word-break: break-all;
+}
+
+.url-card a:hover {
+    text-decoration: underline;
+    color: var(--primary-color);
+}
