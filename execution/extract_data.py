@@ -1,97 +1,99 @@
-# PURPOSE:
-# This script extracts relevant facts from the raw scraped text based on the 
-# user's topic. It uses basic keyword scoring to find the most relevant sentences.
-
 import json
 import os
-import sys
 import re
-from collections import Counter
+import string
+import sys
 
-def get_keywords(topic):
-    """Extracts meaningful keywords from the topic (ignores common stop words)."""
-    # Simple list of words to ignore to improve search quality
-    stop_words = {"that", "need", "with", "have", "this", "best", "some", "what", "where", "when", "why", "how"}
+# PURPOSE:
+# This script reads the raw text scraped from a website and extracts 
+# simple facts that match keywords from the research topic.
+# It includes a 'Noise Filter' to skip binary junk and code.
+
+def is_clean_text(text):
+    """
+    Checks if a string contains mostly printable ASCII characters.
+    Skips binary streams, raw PDF code, and long strings of gibberish.
+    """
+    if not text or len(text.strip()) < 10:
+        return False
     
-    # Split by non-alphanumeric characters
-    words = re.findall(r'\b\w+\b', topic.lower())
+    # Check for common PDF/Binary keywords
+    forbidden_patterns = [
+        r'obj\s*<', r'endobj', r'stream', r'endstream', r'xref', r'trailer',
+        r'%%EOF', r'/MediaBox', r'/Contents', r'\[\s*\d+\s+0\s+R\s*\]'
+    ]
+    for pattern in forbidden_patterns:
+        if re.search(pattern, text):
+            return False
+
+    # Count printable vs non-printable characters
+    printable = set(string.printable)
+    printable_count = sum(1 for char in text if char in printable)
     
-    # Keep words that are > 2 chars and not in standard stop words
-    keywords = [w for w in words if len(w) > 2 and w not in stop_words]
-    
-    # If the user typed a very short topic, just use the whole thing
-    if not keywords:
-        keywords = words
+    # If more than 20% of the text is non-printable/gibberish, it's probably junk
+    if printable_count / len(text) < 0.8:
+        return False
         
-    return keywords
+    return True
 
-def extract_facts(raw_text, topic, max_facts=15):
-    print(f"AI Brain is analyzing the text for topic: '{topic}'")
+def extract_facts(raw_text_path, topic):
+    print(f"--- Extracting Facts for Topic: {topic} ---")
     
-    keywords = get_keywords(topic)
-    print(f"Searching for keywords: {keywords}")
+    if not os.path.exists(raw_text_path):
+        print(f"Error: {raw_text_path} not found.")
+        return []
+
+    with open(raw_text_path, 'r', encoding='utf-8', errors='ignore') as f:
+        content = f.read()
+
+    # Split into sentences (simple logic)
+    sentences = re.split(r'(?<=[.!?])\s+', content)
     
-    # Split text into rough sentences (by period, avoiding acronyms if possible, though basic for MVP)
-    sentences = [s.strip() for s in raw_text.split('.') if len(s.strip()) > 15]
+    # Break topic into keywords for scoring
+    keywords = [word.lower() for word in topic.split() if len(word) > 3]
     
-    scored_sentences = []
+    found_facts = []
     
     for sentence in sentences:
-        score = 0
-        s_lower = sentence.lower()
+        sentence = sentence.strip().replace('\n', ' ')
         
-        # Give 1 point for every keyword found in the sentence
+        # 1. NOISE FILTER: Skip binary junk, code, or very short lines
+        if not is_clean_text(sentence):
+            continue
+            
+        # 2. RELEVANCE CHECK: Score based on keyword matches
+        score = 0
+        sentence_lower = sentence.lower()
         for kw in keywords:
-            if kw in s_lower:
+            if kw in sentence_lower:
                 score += 1
-                
-        # Bonus points if multiple keywords appear close together (simple full string match check)
-        if len(keywords) > 1 and " ".join(keywords[:2]) in s_lower:
-            score += 2
-            
+        
         if score > 0:
-            scored_sentences.append((score, sentence))
-            
-    # Sort by highest score first
-    scored_sentences.sort(key=lambda x: x[0], reverse=True)
-    
-    # Deduplicate similar sentences (basic fuzzy match via first 20 chars)
-    unique_facts = []
-    seen = set()
-    
-    for score, sent in scored_sentences:
-        sig = sent[:20].lower()
-        if sig not in seen:
-            seen.add(sig)
-            # Clean up the sentence slightly
-            clean_fact = sent.replace('\n', ' ').replace('\r', '')
-            unique_facts.append({"fact": clean_fact + ".", "score": score})
-            
-        if len(unique_facts) >= max_facts:
-            break
-            
-    return unique_facts
+            found_facts.append({
+                "fact": sentence,
+                "score": score
+            })
+
+    # Sort by score (most relevant first) and take top 15
+    found_facts.sort(key=lambda x: x['score'], reverse=True)
+    return found_facts[:15]
+
+def save_facts(facts, output_path):
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(facts, f, indent=4)
+    print(f"Saved {len(facts)} facts to {output_path}")
 
 if __name__ == "__main__":
-    try:
-        with open('.tmp/raw_scrape.txt', 'r', encoding='utf-8') as f:
-            raw_text = f.read()
-    except FileNotFoundError:
-        print("Error: Could not find raw text. Did you run scrape_single_site.py first?")
-        sys.exit(1)
-        
-    # Read topic from stdin (passed by run_agent.py subprocess)
-    print("What was your research topic? (Waiting for input...)", file=sys.stderr)
-    topic = sys.stdin.read().strip()
-    
+    # In a real setup, we'd pass the topic as an argument
+    # For now, we ask the user or use a default if piped
+    if not sys.stdin.isatty():
+        topic = sys.stdin.read().strip()
+    else:
+        topic = input("Enter research topic: ")
+
     if not topic:
-        topic = "Unknown Topic"
-    
-    extracted_data = extract_facts(raw_text, topic)
-    
-    os.makedirs('.tmp', exist_ok=True)
-    with open('.tmp/extracted_facts.json', 'w', encoding='utf-8') as f:
-        json.dump(extracted_data, f, indent=4)
-        
-    print(f"Extraction complete! Found {len(extracted_data)} highly relevant facts.")
-    print("Saved clean data to .tmp/extracted_facts.json")
+        topic = "AI Tools"
+
+    facts = extract_facts('.tmp/raw_scrape.txt', topic)
+    save_facts(facts, '.tmp/extracted_facts.json')
